@@ -17,8 +17,17 @@ The application utilizes the _REST architecture_ and _Bridge software design pat
 The context will act as a mediator between the application and the relational database management system to be used
 
 ### Models
-The models represent the entities that will be subject to the application's operations. These models contain attributes wrapped inside the class in order to describe the characteristics of the models. These models will be mapped to the database models in the relational database management system. <br>
+The models represent the entities that will be subject to the application's operations. These models contain attributes wrapped inside the class in order to describe the characteristics of the models. These models will be mapped to the database models in the relational database management system. <br><br>
 
+#### ControllerModelOwner
+These models are the owner of a one-to-one or one-to-many relationship. These models do not have a reference to their many-counterpart. <br>
+
+#### ControllerModelNotOwner
+These models do not own a one-to-one or one-to-many relationship, and these contian references to their one-counterpart. <br>
+
+### ControllerModelOwnerWithArray
+These models are identical to the _ControllerModelOwner_ models, but these are also involved with another one-to-many relationship. Their many-counterpart is a model used to express an array of a characteristic of the _ControllerModelOwnerWithArray_ model. Hence, this type of model is also on the _one_ side of a one-to-many relationship.
+  
 ### Controllers
 The controllers will contain the business logic for the application's operations. The controller will also act as the _abstraction_ classes which will contain the references to the implementation's interfaces. <br>
 
