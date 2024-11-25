@@ -19,10 +19,10 @@ public class ControllerModelOwnerWithArray : ControllerBase {
         this.post = post;
     }
 
-    async public Task<IActionResult>  Post(IDTO dto, string entityName)
+    async public Task<IActionResult>  Post(Object dto, string entityName)
     {
-        this.post.post(context, dto);
-        return StatusCode(201, new {date = $"{entityName} has been successfully created!"});
+        await this.post.post(context, dto);
+        return StatusCode(201, new {data = $"{entityName} has been successfully created!"});
     }
     async public Task<IActionResult> GetAll()
     {

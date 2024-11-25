@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/Gamadan/Desktop/CSharp/FastTrackEServices/FastTrackEServices.csproj": {}
+    "/Users/Gamadan/Desktop/FastTrackEServices/FastTrackEServices.csproj": {}
   },
   "projects": {
-    "/Users/Gamadan/Desktop/CSharp/FastTrackEServices/FastTrackEServices.csproj": {
+    "/Users/Gamadan/Desktop/FastTrackEServices/FastTrackEServices.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Gamadan/Desktop/CSharp/FastTrackEServices/FastTrackEServices.csproj",
+        "projectUniqueName": "/Users/Gamadan/Desktop/FastTrackEServices/FastTrackEServices.csproj",
         "projectName": "FastTrackEServices",
-        "projectPath": "/Users/Gamadan/Desktop/CSharp/FastTrackEServices/FastTrackEServices.csproj",
+        "projectPath": "/Users/Gamadan/Desktop/FastTrackEServices/FastTrackEServices.csproj",
         "packagesPath": "/Users/Gamadan/.nuget/packages/",
-        "outputPath": "/Users/Gamadan/Desktop/CSharp/FastTrackEServices/obj/",
+        "outputPath": "/Users/Gamadan/Desktop/FastTrackEServices/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Gamadan/.nuget/NuGet/NuGet.Config"

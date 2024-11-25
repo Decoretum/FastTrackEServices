@@ -1,4 +1,4 @@
-namespace Implementation.Refined;
+namespace Implementation.Concrete;
 using System.Text.Json;
 using System.Text;
 using System.Web;
@@ -49,13 +49,15 @@ public class ShoeGet : IGet {
             }
             result = shoeArray;
             keyValue["Result"] = result;
-        } 
-        return keyValue;
+        }
+        // await appDbContext.DisposeAsync();
+        return keyValue; 
     }
 
     async public Task<Object> Get(AppDbContext appDbContext, int id)
     {
         Shoe? shoe = await appDbContext.Shoes.Include("shoeColors").Where(x => x.Id == id).SingleOrDefaultAsync();
+        // await appDbContext.DisposeAsync();
         return shoe;
     }
 }

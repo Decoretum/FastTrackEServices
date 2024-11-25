@@ -6,7 +6,4 @@ public class ControllerModelNotOwner {
     IPut put;
     IDelete delete;
     IPost post;
-
-     
-
 }

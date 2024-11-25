@@ -1,6 +1,6 @@
 namespace FastTrackEServices.DTO;
 
-public class EditShoe : IDTO {
+public class EditShoe {
 
     public string name {get; set;}
     public string description {get; set;}

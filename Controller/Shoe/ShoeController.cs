@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FastTrackEServices.Abstraction;
 using FastTrackEServices.Implementation;
-using Implementation.Refined;
+using Implementation.Concrete;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -35,13 +35,12 @@ public class ShoeController : ControllerModelOwnerWithArray {
     }
 
     [HttpPost("[action]")]
-    async public Task<IActionResult> MakeShoe([FromBody] IDTO dto)
+    async public Task<IActionResult> MakeShoe([FromBody] Object dto)
     {
-
         try {
             
             Task<IActionResult> result = base.Post(dto, this.ControllerContext.RouteData.Values["controller"].ToString());
-            return StatusCode(201, new {data = $"Shoe successfully created!"});
+            return result.Result;
         } 
         
         catch (DbUpdateException ex)

@@ -1,4 +1,4 @@
-namespace Implementation.Refined;
+namespace Implementation.Concrete;
 using System.Text.Json;
 using System.Text;
 using System.Web;
@@ -13,11 +13,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using FastTrackEServices.Implementation;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 public class ShoePost : IPost
 {
-    async public void post(AppDbContext appDbContext, CreateShoe dto)
+    public async Task post(AppDbContext appDbContext, Object idto)
     {
+            CreateShoe dto = JsonSerializer.Deserialize<CreateShoe>(idto.ToString());
+            
             Shoe shoe = new ()
             {
                 name = dto.name,
@@ -39,7 +42,6 @@ public class ShoePost : IPost
             appDbContext.ShoeColors.AddRange(shoeColors);
             appDbContext.Shoes.Add(shoe);
             await appDbContext.SaveChangesAsync();
-            
     }
 
 }
