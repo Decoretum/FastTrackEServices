@@ -5,5 +5,5 @@ using Microsoft.AspNetCore.Mvc;
 namespace FastTrackEServices.Implementation;
 
 public interface IPost {
-    Task post(AppDbContext context, Object dto);
+    Task<Dictionary<string, object>> post(AppDbContext context, Object dto);
 }

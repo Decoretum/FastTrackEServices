@@ -19,5 +19,4 @@ public class Shoe
     [Column(TypeName="varchar(100)")]
     public string brand {get; set;}
 
-
 }

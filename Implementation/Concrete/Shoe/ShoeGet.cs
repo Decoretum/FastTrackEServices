@@ -30,6 +30,7 @@ public class ShoeGet : IGet {
             int j = 0;
             foreach (Shoe s in shoes)
             {
+                Console.WriteLine(s.Id);
                 CreateShoe shoe = new()
                 {
                     name = s.name,
@@ -50,14 +51,12 @@ public class ShoeGet : IGet {
             result = shoeArray;
             keyValue["Result"] = result;
         }
-        // await appDbContext.DisposeAsync();
         return keyValue; 
     }
 
     async public Task<Object> Get(AppDbContext appDbContext, int id)
     {
         Shoe? shoe = await appDbContext.Shoes.Include("shoeColors").Where(x => x.Id == id).SingleOrDefaultAsync();
-        // await appDbContext.DisposeAsync();
         return shoe;
     }
 }

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using FastTrackEServices.Abstraction;
 using FastTrackEServices.Implementation;
 using Implementation.Concrete;
+using System.Text.Json;
+using FastTrackEServices.HelperAlgorithms;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,10 +16,12 @@ public class ShoeController : ControllerModelOwnerWithArray {
     private readonly AppDbContext appDbContext;
     private readonly IGet get;
     private readonly IPost post;
+    private readonly ITransform transform;
 
-    public ShoeController(IGet get, IPost post, AppDbContext context) : base (get, post, context)
+    public ShoeController(ITransform transform, IGet get, IPost post, IPut put, AppDbContext context) : base (transform, get, post, put, context)
     {
         appDbContext = context;
+        this.transform = new CollectionToStringArray();
         this.get = new ShoeGet();
         this.post = new ShoePost();
     }
@@ -38,8 +42,9 @@ public class ShoeController : ControllerModelOwnerWithArray {
     async public Task<IActionResult> MakeShoe([FromBody] Object dto)
     {
         try {
-            
-            Task<IActionResult> result = base.Post(dto, this.ControllerContext.RouteData.Values["controller"].ToString());
+            string shoeType = this.ControllerContext.RouteData.Values["controller"].ToString();
+            string shoeName = JsonSerializer.Deserialize<CreateShoe>(dto.ToString()).name;
+            Task<IActionResult> result = base.Post(dto, shoeName, shoeType);
             return result.Result;
         } 
         
@@ -49,12 +54,21 @@ public class ShoeController : ControllerModelOwnerWithArray {
         }
     }
 
-    // async public Task<IActionResult> EditShoe([FromBody] EditShoe shoe)
-    // {
+    [HttpPut("[action]")]
+    async public Task<IActionResult> EditShoe([FromBody] Object dto)
+    {
         // Assuming that the DTO's shoeColor array contains a hashmap of <id - int, string - name>
         // Frontend returns the original id for a shoecolor, but possibly with a different name
+        try {
+            Task<IActionResult> result = base.Put(dto, transform);
+            return result.Result;
+        }
 
+        catch (DbUpdateException ex)
+        {
+            return StatusCode(200, new {data = ex.InnerException.Message});
+        }
 
-    // }
+    }
 }
 

@@ -17,9 +17,24 @@ using System.Text.Json.Serialization;
 
 public class ShoePost : IPost
 {
-    public async Task post(AppDbContext appDbContext, Object idto)
+    public async Task<Dictionary<string, object>> post(AppDbContext appDbContext, Object idto)
     {
             CreateShoe dto = JsonSerializer.Deserialize<CreateShoe>(idto.ToString());
+            Dictionary<string, object> result = new();
+
+            Shoe checkExisting = await appDbContext.Shoes.Where(shoe => shoe.name == dto.name).SingleOrDefaultAsync();
+
+            // Constraints
+            if (dto.name.Length <= 5)
+            {
+                result["Result"] = "The Shoe name must be greater than 5 characters";
+                return result;
+            } else if (checkExisting != null)
+            {
+                result["Result"] = $"There is already an existing shoe with a name of \"{dto.name}\"";
+                return result;
+            }
+
             
             Shoe shoe = new ()
             {
@@ -42,6 +57,8 @@ public class ShoePost : IPost
             appDbContext.ShoeColors.AddRange(shoeColors);
             appDbContext.Shoes.Add(shoe);
             await appDbContext.SaveChangesAsync();
+            result["Result"] = "Success";
+            return result;
     }
 
 }

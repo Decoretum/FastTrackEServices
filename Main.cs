@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using FastTrackEServices.Data;
 using FastTrackEServices.Implementation;
 using Implementation.Concrete;
+using FastTrackEServices.HelperAlgorithms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddTransient<IGet, ShoeGet>();
 builder.Services.AddTransient<IPost, ShoePost>();
+builder.Services.AddTransient<IPut, ShoePut>();
+builder.Services.AddSingleton<ITransform, CollectionToStringArray>();
 
 //Routing
 builder.Services.AddControllers();
