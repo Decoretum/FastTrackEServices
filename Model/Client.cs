@@ -23,7 +23,7 @@ public class Client
     [Column(TypeName="varchar(150)")]
     public string location {get; set;}
 
-    [Column(TypeName="int")]
-    public int contactNumber {get; set;}
+    [Column(TypeName="varchar(11)")]
+    public string contactNumber {get; set;}
 
 }

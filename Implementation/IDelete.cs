@@ -1,5 +1,7 @@
+using FastTrackEServices.Data;
+
 namespace FastTrackEServices.Implementation;
 
-interface IDelete {
-    void delete();
+public interface IDelete {
+    Task delete(AppDbContext context, int id);
 }

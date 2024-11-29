@@ -14,7 +14,7 @@ public class ShoeColor
     [Column(TypeName="varchar(100)")]
     public string name {get; set;}
 
-    public string AString()
+    public string ArrayName()
     {
         return name;
     }

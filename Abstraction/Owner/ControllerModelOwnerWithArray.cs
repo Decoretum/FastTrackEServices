@@ -14,17 +14,22 @@ public class ControllerModelOwnerWithArray : ControllerBase {
     ITransform transform;
     private readonly AppDbContext context;
 
-    public ControllerModelOwnerWithArray (ITransform transform, IGet get, IPost post, IPut put, AppDbContext context)
+    public ControllerModelOwnerWithArray (ITransform transform, IGet get, IPost post, IPut put, IDelete delete, AppDbContext context)
     {
         this.context = context;
         this.get = get;
         this.post = post;
         this.put = put;
+        this.delete = delete;
     }
 
     async public Task<IActionResult>  Post(Object dto, string entityName, string entityType)
     {
         Dictionary<string, object> result = await this.post.post(context, dto);
+
+        if (result["Result"] != "Success")
+        return StatusCode(400, new {data = result});
+
         return StatusCode(201, new {data = $"{entityType} {entityName} has been successfully created!"});
     }
     async public Task<IActionResult> GetAll()
@@ -50,5 +55,11 @@ public class ControllerModelOwnerWithArray : ControllerBase {
         return StatusCode(400, new {data = result});
 
         return StatusCode(200, new {data = result});
+    }
+
+    async public Task<IActionResult> Delete(int id)
+    {
+        await this.delete.delete(this.context, id);
+        return StatusCode(204);
     }
 }

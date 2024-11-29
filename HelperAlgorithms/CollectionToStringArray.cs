@@ -9,7 +9,7 @@ public class CollectionToStringArray : ITransform {
         // Assuming we are working with models
         string[] arr = new string[collection.Count];
         int i = 0;
-        MethodInfo toString = typeof(T).GetMethod("AString");
+        MethodInfo toString = typeof(T).GetMethod("ArrayName");
         foreach (T o in collection)
         {
             string output = (string) toString.Invoke(o, null);

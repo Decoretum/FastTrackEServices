@@ -13,7 +13,7 @@ using System.Reflection;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ShoeController : ControllerModelOwnerWithArray {
+public class ClientController : ControllerModelOwner {
     private const string constantIndividualPath = "[action]/{id:int}";
 
     private readonly AppDbContext appDbContext;
@@ -28,12 +28,12 @@ public class ShoeController : ControllerModelOwnerWithArray {
 
     private readonly ITransform transform;
 
-    public ShoeController(ITransform transform, IGet get, IPost post, IPut put, IDelete delete, AppDbContext context) : base (transform, get, post, put, delete, context)
+    public ClientController(ITransform transform, IGet get, IPost post, IPut put, IDelete delete, AppDbContext context) : base (transform, get, post, put, delete, context)
     {
         appDbContext = context;
         this.transform = new CollectionToStringArray();
-        this.get = new ShoeGet();
-        this.post = new ShoePost();
+        this.get = new ClientGet();
+        this.post = new ClientPost();
         this.delete = new ShoeDelete();
         this.put = new ShoePut();
     }
@@ -51,12 +51,12 @@ public class ShoeController : ControllerModelOwnerWithArray {
     }
 
     [HttpPost("[action]")]
-    async public Task<IActionResult> MakeShoe([FromBody] Object dto)
+    async public Task<IActionResult> MakeClient([FromBody] Object dto)
     {
         try {
-            string shoeType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            string shoeName = JsonSerializer.Deserialize<CreateShoe>(dto.ToString()).name;
-            Task<IActionResult> result = base.Post(dto, shoeName, shoeType);
+            string clientType = this.ControllerContext.RouteData.Values["controller"].ToString();
+            string clientName = JsonSerializer.Deserialize<CreateClient>(dto.ToString()).username;
+            Task<IActionResult> result = base.Post(dto, clientName, clientType);
             return result.Result;
         } 
         
@@ -67,7 +67,7 @@ public class ShoeController : ControllerModelOwnerWithArray {
     }
 
     [HttpPut("[action]")]
-    async public Task<IActionResult> EditShoe([FromBody] Object dto)
+    async public Task<IActionResult> EditClient([FromBody] Object dto)
     {
         // Assuming that the DTO's shoeColor array contains a hashmap of <id - int, string - name>
         // Frontend returns the original id for a shoecolor, but possibly with a different name
@@ -84,7 +84,7 @@ public class ShoeController : ControllerModelOwnerWithArray {
     }
 
     [HttpDelete($"{constantIndividualPath}")]
-    async public Task<IActionResult> DeleteShoe([FromRoute] int id)
+    async public Task<IActionResult> DeleteClient([FromRoute] int id)
     {
         try {
              return await base.Delete(id);

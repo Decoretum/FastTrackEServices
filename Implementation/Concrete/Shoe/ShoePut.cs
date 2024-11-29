@@ -24,7 +24,7 @@ public class ShoePut : IPut
             EditShoe? dto = JsonSerializer.Deserialize<EditShoe>(idto.ToString());
             List<Shoe> checkExisting = await appDbContext.Shoes.Where(shoe => shoe.name == dto.name).ToListAsync();
             bool sameShoe = (await appDbContext.Shoes?.Where(shoe => shoe.Id == dto.Id).SingleOrDefaultAsync()).name == dto?.name;
-            Console.WriteLine(sameShoe);
+      
             if (dto.name.Length <= 5)
             {
                 result["Result"] = "The Shoe name must be greater than 5 characters";
