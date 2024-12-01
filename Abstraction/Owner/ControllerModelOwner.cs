@@ -13,7 +13,7 @@ public class ControllerModelOwner : ControllerBase {
     IPost post;
     ITransform transform;
     private readonly AppDbContext context;
-
+    
     public ControllerModelOwner (ITransform transform, IGet get, IPost post, IPut put, IDelete delete, AppDbContext context)
     {
         this.context = context;
@@ -21,6 +21,7 @@ public class ControllerModelOwner : ControllerBase {
         this.post = post;
         this.put = put;
         this.delete = delete;
+        this.transform = transform;
     }
 
     async public Task<IActionResult>  Post(Object dto, string entityName, string entityType)

@@ -11,7 +11,7 @@ using FastTrackEServices.HelperAlgorithms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ClientController : ControllerModelOwner {
+public class ShoeRepairController : ControllerModelOwner {
     private const string constantIndividualPath = "[action]/{id:int}";
 
     private readonly AppDbContext appDbContext;
@@ -26,9 +26,9 @@ public class ClientController : ControllerModelOwner {
 
     private readonly ITransform transform;
 
-    public ClientController(ITransform transform, IGet get, IPost post, IPut put, IDelete delete, AppDbContext context) : base (transform, get, post, put, delete, context)
+    public ShoeRepairController(ITransform transform, IGet get, IPost post, IPut put, IDelete delete, AppDbContext context) : base (transform, get, post, put, delete, context)
     {
-        appDbContext = context;
+        this.appDbContext = context;
         this.transform = new CollectionToStringArray();
         this.get = new ClientGet();
         this.post = new ClientPost();

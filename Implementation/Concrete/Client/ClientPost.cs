@@ -44,7 +44,8 @@ public class ClientPost : IPost
 
             int calculatedAge = nowYear - dtoYear;
             bool checkExisting = appDbContext.Clients.Any(client => client.username == dto.username);
-            bool invalidDate = (calculatedAge <= 10); 
+            bool invalidDate = calculatedAge <= 10; 
+            bool invalidNumber = dto.contactNumber.Length > 11;
 
             // Constraints
             if (dto.username.Length <= 5)
@@ -59,6 +60,11 @@ public class ClientPost : IPost
             else if (checkExisting)
             {
                 result["Result"] = $"There is already an existing client with a name of \"{dto.username}\"";
+                return result;
+            }
+            else if (invalidNumber == true)
+            {
+                result["Result"] = "The contact number must be less than or equal to 11 digits";
                 return result;
             }
 

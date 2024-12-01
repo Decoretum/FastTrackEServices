@@ -18,8 +18,8 @@ builder.Services.AddTransient<IDelete, ShoeDelete>();
 
 builder.Services.AddTransient<IGet, ClientGet>();
 builder.Services.AddTransient<IPost, ClientPost>();
-// builder.Services.AddTransient<IPut, ClientPut>();
-// builder.Services.AddTransient<IDelete, ClientDelete>();
+builder.Services.AddTransient<IPut, ClientPut>();
+builder.Services.AddTransient<IDelete, ClientDelete>();
 builder.Services.AddSingleton<ITransform, CollectionToStringArray>();
 
 //Routing
