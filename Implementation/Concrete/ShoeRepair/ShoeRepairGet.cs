@@ -36,7 +36,7 @@ public class ShoeRepairGet : IGet {
                 string confirmedDate = ((DateTime) s.dateConfirmed).ToShortDateString();
                 GetShoeRepair repair = new()
                 {
-                    clientName = s.client.username,
+                    client= s.client,
                     dateRegistered = registerDate,
                     dateConfirmed = confirmedDate
                 };
@@ -48,6 +48,7 @@ public class ShoeRepairGet : IGet {
                     i++;
                 }
                 repairArray[j] = repair;
+                j++;
             }
             result = repairArray;
             keyValue["Result"] = result;

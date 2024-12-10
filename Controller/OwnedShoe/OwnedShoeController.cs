@@ -30,10 +30,10 @@ public class OwnedShoeController : ControllerModelOwner {
     {
         this.appDbContext = context;
         this.transform = new CollectionToStringArray();
-        this.get = new ShoeRepairGet();
-        this.post = new ShoeRepairPost();
-        this.delete = new ShoeRepairDelete();
-        this.put = new ShoeRepairPut();
+        this.get = new OwnedShoeGet();
+        this.post = new OwnedShoePost();
+        // this.delete = new ShoeRepairDelete();
+        // this.put = new ShoeRepairPut();
     }
 
     [HttpGet("[action]")]
@@ -49,11 +49,11 @@ public class OwnedShoeController : ControllerModelOwner {
     }
 
     [HttpPost("[action]")]
-    async public Task<IActionResult> MakeShoeRepair([FromBody] Object dto)
+    async public Task<IActionResult> Post([FromBody] Object dto)
     {
         try {
             string shoeRepairType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            string shoeRepairName = "\"A brand new shoe repair \"";
+            string shoeRepairName = "\", A brand new owned shoe \"";
             Task<IActionResult> result = base.Post(dto, shoeRepairName, shoeRepairType);
             return result.Result;
         } 
@@ -65,7 +65,7 @@ public class OwnedShoeController : ControllerModelOwner {
     }
 
     [HttpPut("[action]")]
-    async public Task<IActionResult> EditClient([FromBody] Object dto)
+    async public Task<IActionResult> Put([FromBody] Object dto)
     {
         // Assuming that the DTO's shoeColor array contains a hashmap of <id - int, string - name>
         // Frontend returns the original id for a shoecolor, but possibly with a different name
@@ -82,7 +82,7 @@ public class OwnedShoeController : ControllerModelOwner {
     }
 
     [HttpDelete($"{constantIndividualPath}")]
-    async public Task<IActionResult> DeleteClient([FromRoute] int id)
+    async public Task<IActionResult> Delete([FromRoute] int id)
     {
         try {
              return await base.Delete(id);

@@ -14,4 +14,6 @@ public class OwnedShoe
     public virtual ShoeRepair? shoeRepair {get; set;}
 
     public virtual Shoe shoe {get; set;}
+
+    public DateTime dateAcquired {get; set;}
 }

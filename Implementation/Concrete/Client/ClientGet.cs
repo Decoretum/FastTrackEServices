@@ -17,9 +17,11 @@ public class ClientGet : IGet {
 
     async public Task<Dictionary<string, object>> GetAll(AppDbContext appDbContext)
     {
+
         object result;
         ICollection<Client> clients = await appDbContext.Clients.Include("ownedShoes").ToListAsync();
         Dictionary<string, object> keyValue = new ();
+        Console.WriteLine("COUNT: " + clients.Count);
         if (clients.Count == 0)
         {
             result = "There are no Clients stored in the application";

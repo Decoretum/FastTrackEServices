@@ -11,19 +11,21 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 
 //Dependency Injections
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-builder.Services.AddTransient<IGet, ShoeGet>();
-builder.Services.AddTransient<IPost, ShoePost>();
-builder.Services.AddTransient<IPut, ShoePut>();
-builder.Services.AddTransient<IDelete, ShoeDelete>();
+// builder.Services.AddSingleton<IGet, ShoeGet>();
+// builder.Services.AddSingleton<IPost, ShoePost>();
+// builder.Services.AddSingleton<IPut, ShoePut>();
+// builder.Services.AddSingleton<IDelete, ShoeDelete>();
 
-builder.Services.AddTransient<IGet, ClientGet>();
-builder.Services.AddTransient<IPost, ClientPost>();
-builder.Services.AddTransient<IPut, ClientPut>();
-builder.Services.AddTransient<IDelete, ClientDelete>();
+// builder.Services.AddSingleton<IGet, ClientGet>();
+// builder.Services.AddSingleton<IPost, ClientPost>();
+// builder.Services.AddSingleton<IPut, ClientPut>();
+// builder.Services.AddSingleton<IDelete, ClientDelete>();
 builder.Services.AddSingleton<ITransform, CollectionToStringArray>();
 
-builder.Services.AddTransient<IGet, ShoeRepairGet>();
-builder.Services.AddTransient<IPost, ShoeRepairPost>();
+// builder.Services.AddTransient<IGet, ShoeRepairGet>();
+// builder.Services.AddTransient<IPost, ShoeRepairPost>();
+// builder.Services.AddTransient<IPut, ShoeRepairPut>();
+// builder.Services.AddTransient<IDelete, ShoeRepairDelete>();
 
 //Routing
 builder.Services.AddControllers();

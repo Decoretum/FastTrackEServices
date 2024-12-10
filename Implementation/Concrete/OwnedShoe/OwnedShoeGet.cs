@@ -13,41 +13,37 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using FastTrackEServices.Implementation;
 
-public class ShoeGet : IGet {
+public class OwnedShoeGet : IGet {
 
     async public Task<Dictionary<string, object>> GetAll(AppDbContext appDbContext)
     {
         object result;
-        ICollection<Shoe> shoes = await appDbContext.Shoes.Include("shoeColors").ToListAsync();
+        ICollection<OwnedShoe> ownedShoes = await appDbContext.OwnedShoes.ToListAsync();
         Dictionary<string, object> keyValue = new();
-        if (shoes.Count == 0)
+        if (ownedShoes.Count == 0)
         {
             result = "There are no Shoes stored in the application";
             keyValue["Result"] = result;
             return keyValue;
         } else {
-            object[] shoeArray = new object[shoes.Count];
+            object[] ownedArray = new object[ownedShoes.Count];
             int j = 0;
-            foreach (Shoe s in shoes)
+            foreach (OwnedShoe os in ownedShoes)
             {
-                CreateShoe shoe = new()
+                // default is english culture date representation
+                // MM/DD/YYYY
+                string acquiredDate = os.dateAcquired.ToShortDateString(); 
+                GetOwnedShoe ownedDto = new()
                 {
-                    name = s.name,
-                    brand = s.brand,
-                    description = s.description
+                    client = os.client,
+                    shoe = os.shoe,
+                    shoeRepairId = os.shoeRepair.Id,
+                    dateAcquired = acquiredDate
                 };
-                string[] colors = new string[s.shoeColors.Count];
-                int i = 0;
-                foreach (ShoeColor color in s.shoeColors)
-                {
-                    colors[i] = color.name;
-                    i++;
-                }
-                shoe.shoeColors = colors;
-                shoeArray[j] = shoe;
-                j++;
+
+                ownedArray[j] = ownedDto;
             }
-            result = shoeArray;
+            result = ownedArray;
             keyValue["Result"] = result;
         }
         return keyValue; 
@@ -55,7 +51,7 @@ public class ShoeGet : IGet {
 
     async public Task<Object> Get(AppDbContext appDbContext, int id)
     {
-        Shoe? shoe = await appDbContext.Shoes.Include("shoeColors").Where(x => x.Id == id).SingleOrDefaultAsync();
+        OwnedShoe? shoe = await appDbContext.OwnedShoes.Where(x => x.Id == id).SingleOrDefaultAsync();
         return shoe;
     }
 }

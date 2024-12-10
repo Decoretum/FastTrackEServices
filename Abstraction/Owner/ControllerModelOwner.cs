@@ -36,6 +36,8 @@ public class ControllerModelOwner : ControllerBase {
     async public Task<IActionResult> GetAll()
     {
         Dictionary<string, object> result = await this.get.GetAll(this.context);
+        Console.WriteLine("Request Path: " + Request.Path);
+        Console.WriteLine("Function called: " + this.get.GetType());
         return StatusCode(200, new { data = result });
     }
 

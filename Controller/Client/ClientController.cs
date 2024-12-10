@@ -65,7 +65,7 @@ public class ClientController : ControllerModelOwner {
     }
 
     [HttpPut("[action]")]
-    async public Task<IActionResult> EditClient([FromBody] Object dto)
+    async public Task<IActionResult> Put([FromBody] Object dto)
     {
         // Assuming that the DTO's shoeColor array contains a hashmap of <id - int, string - name>
         // Frontend returns the original id for a shoecolor, but possibly with a different name
@@ -82,7 +82,7 @@ public class ClientController : ControllerModelOwner {
     }
 
     [HttpDelete($"{constantIndividualPath}")]
-    async public Task<IActionResult> DeleteClient([FromRoute] int id)
+    async public Task<IActionResult> Delete([FromRoute] int id)
     {
         try {
              return await base.Delete(id);

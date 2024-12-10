@@ -51,7 +51,7 @@ public class ShoeController : ControllerModelOwnerWithArray {
     }
 
     [HttpPost("[action]")]
-    async public Task<IActionResult> MakeShoe([FromBody] Object dto)
+    async public Task<IActionResult> Post([FromBody] Object dto)
     {
         try {
             string shoeType = this.ControllerContext.RouteData.Values["controller"].ToString();
@@ -67,7 +67,7 @@ public class ShoeController : ControllerModelOwnerWithArray {
     }
 
     [HttpPut("[action]")]
-    async public Task<IActionResult> EditShoe([FromBody] Object dto)
+    async public Task<IActionResult> Put([FromBody] Object dto)
     {
         // Assuming that the DTO's shoeColor array contains a hashmap of <id - int, string - name>
         // Frontend returns the original id for a shoecolor, but possibly with a different name
@@ -84,7 +84,7 @@ public class ShoeController : ControllerModelOwnerWithArray {
     }
 
     [HttpDelete($"{constantIndividualPath}")]
-    async public Task<IActionResult> DeleteShoe([FromRoute] int id)
+    async public Task<IActionResult> Delete([FromRoute] int id)
     {
         try {
              return await base.Delete(id);

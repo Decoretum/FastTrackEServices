@@ -21,6 +21,7 @@ public class ControllerModelOwnerWithArray : ControllerBase {
         this.post = post;
         this.put = put;
         this.delete = delete;
+        this.transform = transform;
     }
 
     async public Task<IActionResult>  Post(Object dto, string entityName, string entityType)
@@ -34,6 +35,8 @@ public class ControllerModelOwnerWithArray : ControllerBase {
     }
     async public Task<IActionResult> GetAll()
     {
+        Console.WriteLine("Request Path: " + Request.Path);
+        Console.WriteLine("Function called: " + this.get.GetType());
         Dictionary<string, object> result = await this.get.GetAll(this.context);
         return StatusCode(200, new { data = result });
     }
