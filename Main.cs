@@ -22,6 +22,9 @@ builder.Services.AddTransient<IPut, ClientPut>();
 builder.Services.AddTransient<IDelete, ClientDelete>();
 builder.Services.AddSingleton<ITransform, CollectionToStringArray>();
 
+builder.Services.AddTransient<IGet, ShoeRepairGet>();
+builder.Services.AddTransient<IPost, ShoeRepairPost>();
+
 //Routing
 builder.Services.AddControllers();
 
