@@ -10,6 +10,9 @@ public class Shoe
 
     public virtual ICollection<ShoeColor>? shoeColors {get; set;}
 
+    // [JsonIgnore]
+    // public virtual ICollection<OwnedShoe>? ownedShoes {get; set;}
+
     [Column(TypeName="varchar(100)")]
     public string name {get; set;}
 

@@ -7,6 +7,8 @@ DESC ownedshoes;
 SELECT * from shoes;
 select * from clients;
 select * from shoecolors;
+select * from ownedshoes;
+select * from shoerepairs;
 
 DELETE FROM Shoes;
 DELETE FROM Shoecolors;

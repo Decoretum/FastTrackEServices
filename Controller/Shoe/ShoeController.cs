@@ -1,11 +1,10 @@
-// namespace Controller;
+namespace Controller;
 using FastTrackEServices.Data;
 using FastTrackEServices.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FastTrackEServices.Abstraction;
 using FastTrackEServices.Implementation;
-using Implementation.Concrete;
 using System.Text.Json;
 using FastTrackEServices.HelperAlgorithms;
 
@@ -52,7 +51,7 @@ public class ShoeController : ControllerModelOwner {
     {
         try {
             string clientType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            string clientName = JsonSerializer.Deserialize<CreateClient>(dto.ToString()).username;
+            string clientName = JsonSerializer.Deserialize<CreateShoe>(dto.ToString()).name;
 
             Dictionary<String, Object> result = await this.restOperation.Post(this.context, dto);
 

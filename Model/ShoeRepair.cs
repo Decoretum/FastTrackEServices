@@ -11,7 +11,7 @@ public class ShoeRepair
     [JsonIgnore]
     public virtual ICollection<OwnedShoe> ownedShoes {get; set;}
 
-    public virtual Client client {get; set;}
+    public Client client {get; set;}
 
     public DateTime dateRegistered {get; set;}
 

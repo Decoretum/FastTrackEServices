@@ -25,22 +25,32 @@ public class ClientRest : IRestOperation {
             {
                 GetClient client = new()
                 {
+                    id = s.Id,
                     username = s.username,
                     dateOfBirth = s.dateOfBirth.ToShortDateString(),
                     contactNumber = s.contactNumber,
                     location = s.location
                 };
-                string[] ownedShoes = new string[s.ownedShoes.Count];
-                int i = 0;
-                foreach (OwnedShoe ownedShoe in s.ownedShoes)
+
+                if (s.ownedShoes != null || s.ownedShoes.Count != 0)
                 {
-                    ownedShoes[i] = ownedShoe.shoe.name;
-                    i++;
+                    string[] ownedShoes = new string[s.ownedShoes.Count];
+                    int i = 0;
+                    foreach (OwnedShoe os in s.ownedShoes)
+                    {
+                        OwnedShoe owned = await context.OwnedShoes.Include("shoe").Where(owned => owned.Id == os.Id).SingleAsync();
+                        ownedShoes[i] = owned.shoe.name;
+                        i++;
+                    }
+                    client.ownedShoes = ownedShoes;
+                } else {
+                    client.ownedShoes = null;
                 }
-                client.ownedShoes = ownedShoes;
+
                 clientArray[j] = client;
                 j++;
             }
+
             result = clientArray;
             keyValue["Result"] = result;
         }

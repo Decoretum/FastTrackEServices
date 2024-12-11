@@ -24,8 +24,9 @@ public class ShoeRest : IRestOperation {
             int j = 0;
             foreach (Shoe s in shoes)
             {
-                CreateShoe shoe = new()
+                GetShoe shoe = new()
                 {
+                    id = s.Id,
                     name = s.name,
                     brand = s.brand,
                     description = s.description

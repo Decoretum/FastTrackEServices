@@ -4,7 +4,7 @@ public class EditShoeRepair {
 
     public int repairId {get; set;}
     
-    public int clientID {get; set;}
+    public int clientId {get; set;}
 
     public string dateRegistered {get; set;}
 

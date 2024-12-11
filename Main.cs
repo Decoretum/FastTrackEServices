@@ -2,7 +2,6 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using FastTrackEServices.Data;
 using FastTrackEServices.Implementation;
-using Implementation.Concrete;
 using FastTrackEServices.HelperAlgorithms;
 using FastTrackEServices.ServiceResolver;
 
@@ -16,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connecti
 builder.Services.AddScoped<IRestOperation, ClientRest>();
 builder.Services.AddScoped<IRestOperation, ShoeRest>();
 builder.Services.AddScoped<IRestOperation, ShoeRepairRest>();
+builder.Services.AddScoped<IRestOperation, OwnedShoeRest>();
 
 // DI for helper algorithms
 builder.Services.AddSingleton<ITransform, CollectionToStringArray>();
