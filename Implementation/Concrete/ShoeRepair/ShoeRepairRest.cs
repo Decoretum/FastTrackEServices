@@ -141,6 +141,17 @@ public class ShoeRepairRest : IRestOperation {
                 OwnedShoe owned = context.OwnedShoes.Where(os => os.Id ==arrayId).SingleOrDefault();
                 owned.shoeRepair = repair;
             }
+
+            // Remove owned shoes that were dislodged
+            ICollection<OwnedShoe> myShoes = repair.ownedShoes;
+            foreach (OwnedShoe shoe in myShoes)
+            {
+                int pk = shoe.Id;
+                if (!dto.ownedShoesArray.Contains(pk))
+                {
+                    shoe.shoeRepair = null;
+                }
+            }
         }
 
         // Change Date Registered or Date Confirmed
