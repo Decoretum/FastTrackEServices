@@ -12,3 +12,8 @@ select * from shoerepairs;
 
 DELETE FROM Shoes;
 DELETE FROM Shoecolors;
+
+delete from shoerepairs
+WHERE ;
+
+delete from ownedshoes;

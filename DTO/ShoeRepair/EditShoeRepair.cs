@@ -6,6 +6,8 @@ public class EditShoeRepair {
     
     public int clientId {get; set;}
 
+    public int[] ownedShoesArray {get; set;}
+
     public string dateRegistered {get; set;}
 
     public string dateConfirmed {get; set;}

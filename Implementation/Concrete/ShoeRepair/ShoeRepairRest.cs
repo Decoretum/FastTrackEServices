@@ -26,11 +26,11 @@ public class ShoeRepairRest : IRestOperation {
             {
                 // default is english culture date representation
                 // MM/DD/YYYY
-                string registerDate = s.dateRegistered.ToShortDateString(); 
+                string registerDate = s.dateRegistered.ToString("MM-dd-yyyy"); 
                 string confirmedDate;
 
                 if (s.dateConfirmed != null)
-                confirmedDate = ((DateTime) s.dateConfirmed).ToShortDateString();
+                confirmedDate = ((DateTime) s.dateConfirmed).ToString("MM-dd-yyyy");
 
                 else
                 confirmedDate = null;
@@ -119,46 +119,46 @@ public class ShoeRepairRest : IRestOperation {
 
         // Change client 
         Client queriedClient = context.Clients.Include("shoeRepairs").Where(c => c.Id == dto.clientId).SingleOrDefault();
-        Console.WriteLine("DTO CLIENT: " + dto.clientId);
-        Console.WriteLine("Repair ID: " + dto.repairId);
-        Console.WriteLine(queriedClient == null); // THIS IS THE CULPRIT
-        // if (repair.client != queriedClient)
-        // {
-        //     Client? newClient = queriedClient;
-        //     foreach (OwnedShoe owned in repair.ownedShoes)
-        //     {
-        //         owned.shoeRepair = null;    
-        //     }
-        //     repair.client = newClient;
-        //     context.ShoeRepairs.Remove(repair);
-        // }
+        // Console.WriteLine("DTO CLIENT: " + dto.clientId);
+        // Console.WriteLine("Repair ID: " + dto.repairId);
+        // Console.WriteLine(queriedClient == null); // THIS IS THE 
+        
+        // Change client and ownedshoe
+        if (repair.client != queriedClient)
+        {
+            Client? newClient = queriedClient;
+            foreach (OwnedShoe owned in repair.ownedShoes)
+            {
+                owned.shoeRepair = null;    
+            }
+            repair.client = newClient;
+
+            // Repoint owned shoes relationship to the shoe repair
+            // DTO array contains pk of owned shoes of client
+            for (int i = 0; i <= dto.ownedShoesArray.Length - 1; i++)
+            {
+                int arrayId = dto.ownedShoesArray[i];
+                OwnedShoe owned = context.OwnedShoes.Where(os => os.Id ==arrayId).SingleOrDefault();
+                owned.shoeRepair = repair;
+            }
+        }
 
         // Change Date Registered or Date Confirmed
         // Assuming Dates from are in format of MM/DD/YYYY
         string[] oldRegister = repair.dateRegistered.ToShortDateString().Split("/");
-        DateTime newConfirmed = DateTime.MaxValue;
-        string[] oldConfirmed;
+        string[] newRegisterArray = dto.dateRegistered.Split("/");
+        DateTime? newConfirmed = ((DateTime?) repair.dateConfirmed);
 
+        // User wants to change date confirmed or not
         if (dto.dateConfirmed != null)
-        newConfirmed = dto.dateConfirmed
-
-
-        if (repair.dateConfirmed != null)
         {
-            Console.WriteLine(((DateTime)repair.dateConfirmed).ToShortDateString());
-            oldConfirmed = ((DateTime) repair.dateConfirmed).ToShortDateString().Split("/");
-            newConfirmed = new DateTime(Convert.ToInt32(oldConfirmed[2]), Convert.ToInt32(oldConfirmed[1]), Convert.ToInt32(oldConfirmed[0]));
+            string[] newConfirmedArray = dto.dateConfirmed.Split("/");
+            newConfirmed = new DateTime(Convert.ToInt32(newConfirmedArray[2]), Convert.ToInt32(newConfirmedArray[0]), Convert.ToInt32(newConfirmedArray[1]));
         }
         
-        else
-        {
-            oldConfirmed = null;
-        }
-        
-        
-        DateTime newRegister = new DateTime(Convert.ToInt32(oldRegister[2]), Convert.ToInt32(oldRegister[1]), Convert.ToInt32(oldRegister[0]));
+        DateTime newRegister = new DateTime(Convert.ToInt32(newRegisterArray[2]), Convert.ToInt32(newRegisterArray[0]), Convert.ToInt32(newRegisterArray[1]));
 
-        if (newRegister > newConfirmed)
+        if (newConfirmed != null && newRegister > newConfirmed)
         {
             result["Result"] = "Register Date cannot be later than Confirmed Date";
             return result;
@@ -174,11 +174,15 @@ public class ShoeRepairRest : IRestOperation {
 
     public async Task Delete(AppDbContext context, int id)
     {
-        ShoeRepair toBeDeleted = await context.ShoeRepairs.Where(sr => sr.Id == id).SingleOrDefaultAsync();
+        ShoeRepair toBeDeleted = context.ShoeRepairs.Include("ownedShoes").Where(sr => sr.Id == id).SingleOrDefault();
+        ICollection<OwnedShoe> ownedShoes = toBeDeleted.ownedShoes;
+
+        foreach (OwnedShoe owned in ownedShoes)
+        {
+            owned.shoeRepair = null;
+        }
 
         context.ShoeRepairs.Remove(toBeDeleted);
-
-        // Delete OwnedShoe
         await context.SaveChangesAsync();
     }
 }
