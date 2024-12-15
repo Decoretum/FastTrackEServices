@@ -7,7 +7,8 @@ The client is a conceptual shoe store owner of a store named **Fast Track** who 
 
 ## Architecture and Pattern
 The application utilizes the _REST architecture_ and _Bridge software design pattern_. <br><br>
-![FastTrackEServicesArchitecture-Bridge Pattern drawio](https://github.com/user-attachments/assets/e4fa2c86-a49c-43e0-bfeb-d6a7cb6ddc95)
+![FastTrackEServicesArchitecture-Bridge Pattern drawio](https://github.com/user-attachments/assets/e09bf57f-9fbf-4843-ab15-1151f063f5de)
+
 
 
 ## Database Design
