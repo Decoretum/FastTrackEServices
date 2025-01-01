@@ -1,16 +1,17 @@
-# FastTrackEServices
-
+## Overview
 FastTrackEServices is a backend application which utilizes C# and .NET 7 in order to provide the means for a shoe store to manage its transactions and appointments regarding shoeware. <br>
 
 ## Context
-The client is a conceptual shoe store owner of a store named **Fast Track** who wishes to manage his/her shoeware transactions due to an increase of percentages of teens and young adults who utilize online shopping and browsing. <br>
+The client is a conceptual shoe store owner of a store named **Fast Track** who wishes to manage his/her shoeware transactions due to an increase of percentages of teens and young adults who utilize online shopping and browsing. The database design and the utilization of the software architecture and design pattern were concepted from scratch for this project. Hence, this project did not use any reference software engineering projects. <br>
 
 ## Architecture and Pattern
 The application utilizes the _REST architecture_ and _Bridge software design pattern_. <br><br>
-![FastTrackEServicesArchitecture-Bridge Pattern drawio](https://github.com/user-attachments/assets/e09bf57f-9fbf-4843-ab15-1151f063f5de)
+![FastTrackEServicesArchitecture-Bridge Pattern drawio](https://github.com/user-attachments/assets/28d5a2a2-d268-466f-9121-4afbf36595bf)
+
 
 ## Database Design
-![FastTrackEServicesArchitecture-DataBase drawio](https://github.com/user-attachments/assets/2731a4c6-6cfb-456a-afec-1cf2b5028d04)
+![FastTrackEServicesArchitecture-DataBase drawio](https://github.com/user-attachments/assets/47d265dc-4b90-41ba-b420-24d900972c6a)
+
 
 ## Components
 ### Application Database Context
