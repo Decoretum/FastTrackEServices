@@ -6,4 +6,5 @@ public class EditShoe {
     public string description {get; set;}
     public string brand {get; set;}
     public string[] shoeColors {get; set;}
+    public int stock {get; set;}
 }

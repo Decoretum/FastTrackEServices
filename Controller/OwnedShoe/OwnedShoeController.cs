@@ -5,57 +5,61 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FastTrackEServices.Abstraction;
 using FastTrackEServices.Implementation;
-using Implementation.Concrete;
 using System.Text.Json;
 using FastTrackEServices.HelperAlgorithms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class OwnedShoeController : ControllerModelOwner {
+public class OwnedShoeController : ControllerModelOwnerWithArray {
     private const string constantIndividualPath = "[action]/{id:int}";
 
-    private readonly AppDbContext appDbContext;
+    private readonly AppDbContext context;
 
-    private readonly IGet get;
-    
-    private readonly IPut put;  
+    protected readonly IEnumerable<IRestOperation> services;
 
-    private readonly IDelete delete;
+    protected readonly IRestOperation restOperation;
 
-    private readonly IPost post;
-
-    private readonly ITransform transform;
-
-    public OwnedShoeController(ITransform transform, IGet get, IPost post, IPut put, IDelete delete, AppDbContext context) : base (transform, get, post, put, delete, context)
+    public OwnedShoeController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
     {
-        this.appDbContext = context;
-        this.transform = new CollectionToStringArray();
-        this.get = new OwnedShoeGet();
-        this.post = new OwnedShoePost();
-        // this.delete = new ShoeRepairDelete();
-        // this.put = new ShoeRepairPut();
+        this.context = context;
+        this.services = services;
+        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(OwnedShoewareRest));
     }
 
     [HttpGet("[action]")]
-    public Task<IActionResult> GetAll()
+    async public override Task<IActionResult> GetAll()
     {
-        return base.GetAll();
+
+        Dictionary<string, object> result = await this.restOperation.GetAll(this.context);
+        return StatusCode(200, new { data = result });
     }
 
     [HttpGet($"{constantIndividualPath}")]
-    public Task<IActionResult> Get([FromRoute] int id)
+    async public override Task<IActionResult> Get([FromRoute] int id)
     {  
-        return base.Get(id, this.ControllerContext.RouteData.Values["controller"].ToString());
+        Object result = await this.restOperation.Get(this.context, id); 
+        string entityType = this.ControllerContext.RouteData.Values["controller"].ToString();
+        if (result == null)
+        {
+            return StatusCode(200, new { data = $"{entityType} with an ID of {id} is not found" });
+        }
+        return StatusCode(200, new {data = result});
     }
 
     [HttpPost("[action]")]
-    async public Task<IActionResult> Post([FromBody] Object dto)
+    async public override Task<IActionResult> Post([FromBody] Object dto)
     {
         try {
-            string shoeRepairType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            string shoeRepairName = "\", A brand new owned shoe \"";
-            Task<IActionResult> result = base.Post(dto, shoeRepairName, shoeRepairType);
-            return result.Result;
+            string clientType = this.ControllerContext.RouteData.Values["controller"].ToString();
+            int shoeId = JsonSerializer.Deserialize<CreateOwnedShoe>(dto.ToString()).shoeId;
+            string clientName = $"from an existing shoe of shoe ID {shoeId}";
+            Task<Dictionary<String, Object>> result = this.restOperation.Post(this.context, dto);
+
+            if (result.Result["Result"] != "Success")
+            return StatusCode(400, new {data = result.Result["Result"]});
+
+            else 
+            return StatusCode(201, new {data = $"{clientType} {clientName} has been successfully created!"});
         } 
         
         catch (DbUpdateException ex)
@@ -65,13 +69,17 @@ public class OwnedShoeController : ControllerModelOwner {
     }
 
     [HttpPut("[action]")]
-    async public Task<IActionResult> Put([FromBody] Object dto)
+    async public override Task<IActionResult> Put([FromBody] Object dto, ITransform transform)
     {
         // Assuming that the DTO's shoeColor array contains a hashmap of <id - int, string - name>
         // Frontend returns the original id for a shoecolor, but possibly with a different name
         try {
-            Task<IActionResult> result = base.Put(dto, transform);
-            return result.Result;
+            Dictionary<String, Object> result = this.restOperation.Put(this.context, dto, transform).Result;
+            
+            if (result["Result"] != "Success")
+            return StatusCode(400, new {data = result});
+
+            return StatusCode(200, new {data = result});
         }
 
         catch (DbUpdateException ex)
@@ -82,10 +90,11 @@ public class OwnedShoeController : ControllerModelOwner {
     }
 
     [HttpDelete($"{constantIndividualPath}")]
-    async public Task<IActionResult> Delete([FromRoute] int id)
+    async public override Task<IActionResult> Delete([FromRoute] int id)
     {
         try {
-             return await base.Delete(id);
+             await this.restOperation.Delete(this.context, id);
+             return StatusCode(204);
         } catch (DbUpdateException ex)
         {
             return StatusCode(500, new {data = ex.InnerException.Message});

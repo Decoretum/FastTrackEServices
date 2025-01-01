@@ -45,7 +45,33 @@ namespace FastTrackEServices.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.OwnedShoe", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.OrderCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("cart_name")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("clientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("dateConfirmed")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("dateRegistered")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("clientId");
+
+                    b.ToTable("OrderCarts");
+                });
+
+            modelBuilder.Entity("FastTrackEServices.Model.OwnedShoeware", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,7 +86,7 @@ namespace FastTrackEServices.Migrations
                     b.Property<int>("shoeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("shoeRepairId")
+                    b.Property<int?>("shoewareRepairId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -69,12 +95,12 @@ namespace FastTrackEServices.Migrations
 
                     b.HasIndex("shoeId");
 
-                    b.HasIndex("shoeRepairId");
+                    b.HasIndex("shoewareRepairId");
 
-                    b.ToTable("OwnedShoes");
+                    b.ToTable("OwnedShoewares");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.Shoe", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.Shoeware", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,12 +118,15 @@ namespace FastTrackEServices.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
+                    b.Property<int>("stock")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Shoes");
+                    b.ToTable("Shoewares");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.ShoeColor", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.ShoewareColor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,10 +143,38 @@ namespace FastTrackEServices.Migrations
 
                     b.HasIndex("shoeId");
 
-                    b.ToTable("ShoeColors");
+                    b.ToTable("ShoewareColors");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.ShoeRepair", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.ShoewareOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("orderCartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("shoeColor")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("shoewareId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("orderCartId");
+
+                    b.HasIndex("shoewareId");
+
+                    b.ToTable("ShoewareOrders");
+                });
+
+            modelBuilder.Entity("FastTrackEServices.Model.ShoewareRepair", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,10 +193,21 @@ namespace FastTrackEServices.Migrations
 
                     b.HasIndex("clientId");
 
-                    b.ToTable("ShoeRepairs");
+                    b.ToTable("ShoewareRepairs");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.OwnedShoe", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.OrderCart", b =>
+                {
+                    b.HasOne("FastTrackEServices.Model.Client", "client")
+                        .WithMany("orderCarts")
+                        .HasForeignKey("clientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("client");
+                });
+
+            modelBuilder.Entity("FastTrackEServices.Model.OwnedShoeware", b =>
                 {
                     b.HasOne("FastTrackEServices.Model.Client", "client")
                         .WithMany("ownedShoes")
@@ -147,26 +215,26 @@ namespace FastTrackEServices.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FastTrackEServices.Model.Shoe", "shoe")
+                    b.HasOne("FastTrackEServices.Model.Shoeware", "shoe")
                         .WithMany()
                         .HasForeignKey("shoeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FastTrackEServices.Model.ShoeRepair", "shoeRepair")
+                    b.HasOne("FastTrackEServices.Model.ShoewareRepair", "shoewareRepair")
                         .WithMany("ownedShoes")
-                        .HasForeignKey("shoeRepairId");
+                        .HasForeignKey("shoewareRepairId");
 
                     b.Navigation("client");
 
                     b.Navigation("shoe");
 
-                    b.Navigation("shoeRepair");
+                    b.Navigation("shoewareRepair");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.ShoeColor", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.ShoewareColor", b =>
                 {
-                    b.HasOne("FastTrackEServices.Model.Shoe", "shoe")
+                    b.HasOne("FastTrackEServices.Model.Shoeware", "shoe")
                         .WithMany("shoeColors")
                         .HasForeignKey("shoeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -175,7 +243,26 @@ namespace FastTrackEServices.Migrations
                     b.Navigation("shoe");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.ShoeRepair", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.ShoewareOrder", b =>
+                {
+                    b.HasOne("FastTrackEServices.Model.OrderCart", "orderCart")
+                        .WithMany("shoewareOrders")
+                        .HasForeignKey("orderCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FastTrackEServices.Model.Shoeware", "shoeware")
+                        .WithMany()
+                        .HasForeignKey("shoewareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("orderCart");
+
+                    b.Navigation("shoeware");
+                });
+
+            modelBuilder.Entity("FastTrackEServices.Model.ShoewareRepair", b =>
                 {
                     b.HasOne("FastTrackEServices.Model.Client", "client")
                         .WithMany("shoeRepairs")
@@ -188,17 +275,24 @@ namespace FastTrackEServices.Migrations
 
             modelBuilder.Entity("FastTrackEServices.Model.Client", b =>
                 {
+                    b.Navigation("orderCarts");
+
                     b.Navigation("ownedShoes");
 
                     b.Navigation("shoeRepairs");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.Shoe", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.OrderCart", b =>
+                {
+                    b.Navigation("shoewareOrders");
+                });
+
+            modelBuilder.Entity("FastTrackEServices.Model.Shoeware", b =>
                 {
                     b.Navigation("shoeColors");
                 });
 
-            modelBuilder.Entity("FastTrackEServices.Model.ShoeRepair", b =>
+            modelBuilder.Entity("FastTrackEServices.Model.ShoewareRepair", b =>
                 {
                     b.Navigation("ownedShoes");
                 });

@@ -1,6 +1,7 @@
 namespace FastTrackEServices.DTO;
 
 public class GetClient {
+    public int id {get; set;}
     public string username {get; set;}
 
     public string dateOfBirth {get; set;}

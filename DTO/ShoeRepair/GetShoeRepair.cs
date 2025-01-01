@@ -4,7 +4,8 @@ namespace FastTrackEServices.DTO;
 
 public class GetShoeRepair {
 
-    public string[] ownedShoes {get; set;}
+    public int Id {get; set;}
+    public int[] ownedShoes {get; set;}
 
     public Client client {get; set;}
 

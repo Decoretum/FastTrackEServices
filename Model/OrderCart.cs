@@ -11,14 +11,14 @@ public class OrderCart
     public Client client {get; set;}
 
     [JsonIgnore]
-    public ICollection<ShoeOrder>? shoeOrders {get; set;}
+    public ICollection<ShoewareOrder>? shoewareOrders {get; set;}
 
     [Column(TypeName="varchar(100)")]
     public string cart_name {get; set;}
 
     public DateTime dateRegistered {get; set;}
 
-    public DateTime dateConfirmed {get; set;}
+    public DateTime? dateConfirmed {get; set;}
 
 
 }

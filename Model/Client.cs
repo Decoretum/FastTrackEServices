@@ -10,10 +10,13 @@ public class Client
     public int Id {get; set;}
 
     [JsonIgnore]
-    public virtual ICollection<OwnedShoe>? ownedShoes {get; set;}
+    public virtual ICollection<OwnedShoeware>? ownedShoes {get; set;}
 
     [JsonIgnore]
-    public virtual ICollection<ShoeRepair>? shoeRepairs {get; set;}
+    public virtual ICollection<OrderCart>? orderCarts {get; set;}
+
+    [JsonIgnore]
+    public virtual ICollection<ShoewareRepair>? shoeRepairs {get; set;}
 
     [Column(TypeName="varchar(100)")]
     public string username {get; set;}
