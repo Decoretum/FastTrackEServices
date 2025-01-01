@@ -56,8 +56,9 @@ public class ShoeController : ControllerModelOwner {
             Dictionary<String, Object> result = await this.restOperation.Post(this.context, dto);
 
             if (result["Result"] == "Success")
-            return StatusCode(201, new {data = $"{clientType} has been successfully created!"});
+            return StatusCode(201, new {data = $"{clientType} {clientName} has been successfully created!"});
 
+            else
             return StatusCode(400, new {data = result});
 
 

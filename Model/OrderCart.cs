@@ -18,7 +18,7 @@ public class OrderCart
 
     public DateTime dateRegistered {get; set;}
 
-    public DateTime dateConfirmed {get; set;}
+    public DateTime? dateConfirmed {get; set;}
 
 
 }

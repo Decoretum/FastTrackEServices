@@ -10,7 +10,7 @@ using FastTrackEServices.HelperAlgorithms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ClientController : ControllerModelOwner {
+public class OrderCartController : ControllerModelOwner {
     private const string constantIndividualPath = "[action]/{id:int}";
 
     private readonly AppDbContext appDbContext;
@@ -21,11 +21,11 @@ public class ClientController : ControllerModelOwner {
 
     protected readonly IRestOperation restOperation;
 
-    public ClientController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
+    public OrderCartController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
     {
         this.context = context;
         this.services = services;
-        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(ClientRest));
+        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(OrderCartRest));
     }
 
     [HttpGet("[action]")]
@@ -53,12 +53,12 @@ public class ClientController : ControllerModelOwner {
     {
         try {
             string clientType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            string clientName = JsonSerializer.Deserialize<CreateClient>(dto.ToString()).username;
+            string clientName = "for a new client";
             Task<Dictionary<String, Object>> result = this.restOperation.Post(this.context, dto);
 
             if (result.Result["Result"] == "Success")
             return StatusCode(201, new {data = $"{clientType} {clientName} has been successfully created!"});
-
+            
             else
             return StatusCode(400, new {data = result.Result["Result"]});
         } 

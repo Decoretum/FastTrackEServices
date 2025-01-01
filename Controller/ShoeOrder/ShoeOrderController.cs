@@ -10,10 +10,8 @@ using FastTrackEServices.HelperAlgorithms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ClientController : ControllerModelOwner {
+public class ShoeOrderController : ControllerModelNotOwner {
     private const string constantIndividualPath = "[action]/{id:int}";
-
-    private readonly AppDbContext appDbContext;
 
     private readonly AppDbContext context;
 
@@ -21,11 +19,11 @@ public class ClientController : ControllerModelOwner {
 
     protected readonly IRestOperation restOperation;
 
-    public ClientController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
+    public ShoeOrderController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
     {
         this.context = context;
         this.services = services;
-        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(ClientRest));
+        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(OwnedShoeRest));
     }
 
     [HttpGet("[action]")]
@@ -53,14 +51,15 @@ public class ClientController : ControllerModelOwner {
     {
         try {
             string clientType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            string clientName = JsonSerializer.Deserialize<CreateClient>(dto.ToString()).username;
+            int shoeId = JsonSerializer.Deserialize<CreateOwnedShoe>(dto.ToString()).shoeId;
+            string clientName = $"from an existing shoe of shoe ID {shoeId}";
             Task<Dictionary<String, Object>> result = this.restOperation.Post(this.context, dto);
 
-            if (result.Result["Result"] == "Success")
-            return StatusCode(201, new {data = $"{clientType} {clientName} has been successfully created!"});
-
-            else
+            if (result.Result["Result"] != "Success")
             return StatusCode(400, new {data = result.Result["Result"]});
+
+            else 
+            return StatusCode(201, new {data = $"{clientType} {clientName} has been successfully created!"});
         } 
         
         catch (DbUpdateException ex)

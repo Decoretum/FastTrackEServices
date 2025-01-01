@@ -54,8 +54,12 @@ public class OwnedShoeController : ControllerModelOwnerWithArray {
             int shoeId = JsonSerializer.Deserialize<CreateOwnedShoe>(dto.ToString()).shoeId;
             string clientName = $"from an existing shoe of shoe ID {shoeId}";
             Task<Dictionary<String, Object>> result = this.restOperation.Post(this.context, dto);
-            // return StatusCode(201, new {data = $"{clientType} {clientName} has been successfully created!"});
-            return StatusCode(201, new {data = result.Result["Result"]});
+
+            if (result.Result["Result"] != "Success")
+            return StatusCode(400, new {data = result.Result["Result"]});
+
+            else 
+            return StatusCode(201, new {data = $"{clientType} {clientName} has been successfully created!"});
         } 
         
         catch (DbUpdateException ex)

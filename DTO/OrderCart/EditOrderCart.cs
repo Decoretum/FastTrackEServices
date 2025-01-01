@@ -1,12 +1,10 @@
 namespace FastTrackEServices.DTO;
 
-public class EditShoeRepair {
+public class EditOrderCart {
 
-    public int repairId {get; set;}
-    
-    public int clientId {get; set;}
+    public int Id {get; set;}
 
-    public int[] ownedShoesArray {get; set;}
+    public string clientUsername {get; set;}
 
     public string dateRegistered {get; set;}
 
@@ -14,5 +12,4 @@ public class EditShoeRepair {
 
     // "True" or "False"
     public string confirming {get; set;}
-
 }

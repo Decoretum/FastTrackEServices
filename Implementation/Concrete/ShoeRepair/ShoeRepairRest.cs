@@ -117,12 +117,17 @@ public class ShoeRepairRest : IRestOperation {
         Dictionary<string, object> result = new();
         ShoeRepair? repair = context.ShoeRepairs.Include("client").Include("ownedShoes").Where(sr => sr.Id == dto.repairId).SingleOrDefault();
 
+        if (dto.confirming == "True")
+        {
+            context.Entry(repair).Property(r => r.dateConfirmed).CurrentValue = DateTime.Now;
+            result["Result"] = "Success";
+            context.SaveChangesAsync();
+            return result;
+        }
+
         // Change client 
         Client queriedClient = context.Clients.Include("shoeRepairs").Where(c => c.Id == dto.clientId).SingleOrDefault();
-        // Console.WriteLine("DTO CLIENT: " + dto.clientId);
-        // Console.WriteLine("Repair ID: " + dto.repairId);
-        // Console.WriteLine(queriedClient == null); // THIS IS THE 
-        
+
         // Change client and ownedshoe
         if (repair.client != queriedClient)
         {

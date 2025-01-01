@@ -3,6 +3,7 @@ using System;
 using FastTrackEServices.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FastTrackEServices.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250101074111_Added OrderCart Table")]
+    partial class AddedOrderCartTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace FastTrackEServices.Migrations
                     b.Property<int>("clientId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("dateConfirmed")
+                    b.Property<DateTime>("dateConfirmed")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("dateRegistered")

@@ -13,6 +13,9 @@ public class Client
     public virtual ICollection<OwnedShoe>? ownedShoes {get; set;}
 
     [JsonIgnore]
+    public virtual ICollection<OrderCart>? orderCarts {get; set;}
+
+    [JsonIgnore]
     public virtual ICollection<ShoeRepair>? shoeRepairs {get; set;}
 
     [Column(TypeName="varchar(100)")]

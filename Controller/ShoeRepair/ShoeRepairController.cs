@@ -51,13 +51,14 @@ public class ShoeRepairController : ControllerModelOwner {
     {
         try {
             string clientType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            string clientName = JsonSerializer.Deserialize<CreateShoe>(dto.ToString()).name;
+            int clientName = JsonSerializer.Deserialize<CreateShoeRepair>(dto.ToString()).clientId;
 
             Dictionary<String, Object> result = await this.restOperation.Post(this.context, dto);
 
             if (result["Result"] == "Success")
-            return StatusCode(201, new {data = $"{clientType} has been successfully created!"});
+            return StatusCode(201, new {data = $"{clientType} for client {clientName} has been successfully created!"});
 
+            else
             return StatusCode(400, new {data = result});
 
 
