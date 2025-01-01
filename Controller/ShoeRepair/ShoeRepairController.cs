@@ -23,7 +23,7 @@ public class ShoeRepairController : ControllerModelOwner {
     {
         this.context = context;
         this.services = services;
-        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(ShoeRepairRest));
+        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(ShoewareRepairRest));
     }
 
     [HttpGet("[action]")]

@@ -42,11 +42,11 @@ public class OrderCartRest : IRestOperation {
                     dateConfirmed = newConfirmed
                 };
 
-                if (oc.shoeOrders != null || oc.shoeOrders.Count != 0)
+                if (oc.shoewareOrders != null || oc.shoewareOrders.Count != 0)
                 {
-                    int[] shoeOrders = new int[oc.shoeOrders.Count];
+                    int[] shoeOrders = new int[oc.shoewareOrders.Count];
                     int i = 0;
-                    foreach (ShoeOrder o in oc.shoeOrders)
+                    foreach (ShoewareOrder o in oc.shoewareOrders)
                     {
                         shoeOrders[i] = o.Id;
                         i++;
@@ -91,10 +91,10 @@ public class OrderCartRest : IRestOperation {
         else
         dto.dateConfirmed = ((DateTime) cart.dateConfirmed).ToShortDateString();
 
-        ICollection<ShoeOrder> orders = cart.shoeOrders;
+        ICollection<ShoewareOrder> orders = cart.shoewareOrders;
         int[] shoeOrders = new int[orders.Count];
         int i = 0;
-        foreach (ShoeOrder order in orders)
+        foreach (ShoewareOrder order in orders)
         {
             shoeOrders[i] = order.Id;
             i++;
@@ -244,9 +244,9 @@ public class OrderCartRest : IRestOperation {
     public async Task Delete(AppDbContext context, int id)
     {
         OrderCart toBeDeleted = context.OrderCarts.Include("shoeOrders").Where(c => c.Id == id).SingleOrDefault();
-        ICollection<ShoeOrder> orders = toBeDeleted.shoeOrders;
+        ICollection<ShoewareOrder> orders = toBeDeleted.shoewareOrders;
 
-        context.ShoeOrders.RemoveRange(orders);
+        context.ShoewareOrders.RemoveRange(orders);
 
         context.OrderCarts.Remove(toBeDeleted);
 

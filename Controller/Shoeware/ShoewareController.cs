@@ -10,7 +10,7 @@ using FastTrackEServices.HelperAlgorithms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ShoeController : ControllerModelOwner {
+public class ShoewareController : ControllerModelOwner {
     private const string constantIndividualPath = "[action]/{id:int}";
 
     private readonly AppDbContext context;
@@ -19,11 +19,11 @@ public class ShoeController : ControllerModelOwner {
 
     protected readonly IRestOperation restOperation;
 
-    public ShoeController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
+    public ShoewareController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
     {
         this.context = context;
         this.services = services;
-        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(ShoeRest));
+        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(ShoewareRest));
     }
 
     [HttpGet("[action]")]

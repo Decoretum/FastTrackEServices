@@ -36,9 +36,9 @@ public class ClientRest : IRestOperation {
                 {
                     string[] ownedShoes = new string[s.ownedShoes.Count];
                     int i = 0;
-                    foreach (OwnedShoe os in s.ownedShoes)
+                    foreach (OwnedShoeware os in s.ownedShoes)
                     {
-                        OwnedShoe owned = await context.OwnedShoes.Include("shoe").Where(owned => owned.Id == os.Id).SingleAsync();
+                        OwnedShoeware owned = await context.OwnedShoewares.Include("shoe").Where(owned => owned.Id == os.Id).SingleAsync();
                         ownedShoes[i] = owned.shoe.name;
                         i++;
                     }
@@ -200,14 +200,14 @@ public class ClientRest : IRestOperation {
     public async Task Delete(AppDbContext context, int id)
     {
         Client toBeDeleted = await context.Clients.Include("ownedShoes").Include("shoeRepairs").Where(client => client.Id == id).SingleOrDefaultAsync();
-        ICollection<OwnedShoe> owned = toBeDeleted.ownedShoes;
-        ICollection<ShoeRepair> repairs = toBeDeleted.shoeRepairs;
+        ICollection<OwnedShoeware> owned = toBeDeleted.ownedShoes;
+        ICollection<ShoewareRepair> repairs = toBeDeleted.shoeRepairs;
 
         // Delete Shoe Repairs
-        context.ShoeRepairs.RemoveRange(repairs);
+        context.ShoewareRepairs.RemoveRange(repairs);
 
         // Delete Shoe Owned
-        context.OwnedShoes.RemoveRange(owned);
+        context.OwnedShoewares.RemoveRange(owned);
 
         // Delete Shoe
         context.Clients.Remove(toBeDeleted);

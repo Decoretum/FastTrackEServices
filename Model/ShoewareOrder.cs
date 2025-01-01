@@ -2,12 +2,12 @@ namespace FastTrackEServices.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class ShoeOrder 
+public class ShoewareOrder 
 {
     [Key]
     public int Id {get; set;}
 
-    public Shoe shoe {get; set;}
+    public Shoeware shoeware {get; set;}
 
     public OrderCart orderCart {get; set;}
 

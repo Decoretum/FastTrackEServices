@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FastTrackEServices.Implementation;
 
-public class ShoeRepairRest : IRestOperation {
+public class ShoewareRepairRest : IRestOperation {
 
     public async Task<Dictionary<string, object>>? GetAll(AppDbContext context)
     {
         object result;
-        ICollection<ShoeRepair> shoeRepairs = await context.ShoeRepairs.Include("client").Include("ownedShoes").ToListAsync();
+        ICollection<ShoewareRepair> shoeRepairs = await context.ShoewareRepairs.Include("client").Include("ownedShoes").ToListAsync();
         Dictionary<string, object> keyValue = new();
         if (shoeRepairs.Count == 0)
         {
@@ -22,7 +22,7 @@ public class ShoeRepairRest : IRestOperation {
         } else {
             object[] repairArray = new object[shoeRepairs.Count];
             int j = 0;
-            foreach (ShoeRepair s in shoeRepairs)
+            foreach (ShoewareRepair s in shoeRepairs)
             {
                 // default is english culture date representation
                 // MM/DD/YYYY
@@ -46,7 +46,7 @@ public class ShoeRepairRest : IRestOperation {
                 int[] owned = new int[s.ownedShoes.Count];
                 int i = 0;
 
-                foreach (OwnedShoe shoe in s.ownedShoes)
+                foreach (OwnedShoeware shoe in s.ownedShoes)
                 {
                     owned[i] = shoe.Id;
                     i++;
@@ -65,7 +65,7 @@ public class ShoeRepairRest : IRestOperation {
 
     public async Task<Object>? Get(AppDbContext context, int id)
     {
-        ShoeRepair? shoe = await context.ShoeRepairs.Include("ownedShoes").Where(x => x.Id == id).SingleOrDefaultAsync();
+        ShoewareRepair? shoe = await context.ShoewareRepairs.Include("ownedShoes").Where(x => x.Id == id).SingleOrDefaultAsync();
         return shoe;
     }
 
@@ -84,7 +84,7 @@ public class ShoeRepairRest : IRestOperation {
             DateTime dateNow = DateTime.Now;
 
             // Set Attributes
-            ShoeRepair repair = new ()
+            ShoewareRepair repair = new ()
             {
                 client = client,
                 dateConfirmed = null,
@@ -95,17 +95,17 @@ public class ShoeRepairRest : IRestOperation {
             for (int i = 0; i <= dto.ownedShoes.Length - 1; i++)
             {
                 int ownedShoeId = dto.ownedShoes[i];
-                OwnedShoe? owned = await context.OwnedShoes.Where(os => os.Id == ownedShoeId && os.client == client).SingleOrDefaultAsync();
+                OwnedShoeware? owned = await context.OwnedShoewares.Where(os => os.Id == ownedShoeId && os.client == client).SingleOrDefaultAsync();
                 if (owned == null)
                 {
                     result["Result"] = $"Client {client.username} has no owned shoe of ID {ownedShoeId}";
                     return result;
                 } else {
-                    owned.shoeRepair = repair;
+                    owned.shoewareRepair = repair;
                 }
             }
 
-            context.ShoeRepairs.Add(repair);
+            context.ShoewareRepairs.Add(repair);
             await context.SaveChangesAsync();
             result["Result"] = "Success";
             return result;
@@ -115,7 +115,7 @@ public class ShoeRepairRest : IRestOperation {
     {
         EditShoeRepair? dto = JsonSerializer.Deserialize<EditShoeRepair>(idto.ToString());
         Dictionary<string, object> result = new();
-        ShoeRepair? repair = context.ShoeRepairs.Include("client").Include("ownedShoes").Where(sr => sr.Id == dto.repairId).SingleOrDefault();
+        ShoewareRepair? repair = context.ShoewareRepairs.Include("client").Include("ownedShoes").Where(sr => sr.Id == dto.repairId).SingleOrDefault();
 
         if (dto.confirming == "True")
         {
@@ -132,9 +132,9 @@ public class ShoeRepairRest : IRestOperation {
         if (repair.client != queriedClient)
         {
             Client? newClient = queriedClient;
-            foreach (OwnedShoe owned in repair.ownedShoes)
+            foreach (OwnedShoeware owned in repair.ownedShoes)
             {
-                owned.shoeRepair = null;    
+                owned.shoewareRepair = null;    
             }
             repair.client = newClient;
 
@@ -143,18 +143,18 @@ public class ShoeRepairRest : IRestOperation {
             for (int i = 0; i <= dto.ownedShoesArray.Length - 1; i++)
             {
                 int arrayId = dto.ownedShoesArray[i];
-                OwnedShoe owned = context.OwnedShoes.Where(os => os.Id ==arrayId).SingleOrDefault();
-                owned.shoeRepair = repair;
+                OwnedShoeware owned = context.OwnedShoewares.Where(os => os.Id ==arrayId).SingleOrDefault();
+                owned.shoewareRepair = repair;
             }
 
             // Remove owned shoes that were dislodged
-            ICollection<OwnedShoe> myShoes = repair.ownedShoes;
-            foreach (OwnedShoe shoe in myShoes)
+            ICollection<OwnedShoeware> myShoes = repair.ownedShoes;
+            foreach (OwnedShoeware shoe in myShoes)
             {
                 int pk = shoe.Id;
                 if (!dto.ownedShoesArray.Contains(pk))
                 {
-                    shoe.shoeRepair = null;
+                    shoe.shoewareRepair = null;
                 }
             }
         }
@@ -190,15 +190,15 @@ public class ShoeRepairRest : IRestOperation {
 
     public async Task Delete(AppDbContext context, int id)
     {
-        ShoeRepair toBeDeleted = context.ShoeRepairs.Include("ownedShoes").Where(sr => sr.Id == id).SingleOrDefault();
-        ICollection<OwnedShoe> ownedShoes = toBeDeleted.ownedShoes;
+        ShoewareRepair toBeDeleted = context.ShoewareRepairs.Include("ownedShoes").Where(sr => sr.Id == id).SingleOrDefault();
+        ICollection<OwnedShoeware> ownedShoes = toBeDeleted.ownedShoes;
 
-        foreach (OwnedShoe owned in ownedShoes)
+        foreach (OwnedShoeware owned in ownedShoes)
         {
-            owned.shoeRepair = null;
+            owned.shoewareRepair = null;
         }
 
-        context.ShoeRepairs.Remove(toBeDeleted);
+        context.ShoewareRepairs.Remove(toBeDeleted);
         await context.SaveChangesAsync();
     }
 }

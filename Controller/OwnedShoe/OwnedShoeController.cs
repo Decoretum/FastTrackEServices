@@ -23,7 +23,7 @@ public class OwnedShoeController : ControllerModelOwnerWithArray {
     {
         this.context = context;
         this.services = services;
-        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(OwnedShoeRest));
+        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(OwnedShoewareRest));
     }
 
     [HttpGet("[action]")]

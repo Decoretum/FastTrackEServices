@@ -10,7 +10,7 @@ using FastTrackEServices.HelperAlgorithms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ShoeOrderController : ControllerModelNotOwner {
+public class ShoewareOrderController : ControllerModelNotOwner {
     private const string constantIndividualPath = "[action]/{id:int}";
 
     private readonly AppDbContext context;
@@ -19,11 +19,11 @@ public class ShoeOrderController : ControllerModelNotOwner {
 
     protected readonly IRestOperation restOperation;
 
-    public ShoeOrderController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
+    public ShoewareOrderController(AppDbContext context, IEnumerable<IRestOperation> services) : base (context, services)
     {
         this.context = context;
         this.services = services;
-        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(OwnedShoeRest));
+        this.restOperation = services.FirstOrDefault(s => s.GetType() == typeof(ShoewareOrderRest));
     }
 
     [HttpGet("[action]")]
@@ -51,7 +51,7 @@ public class ShoeOrderController : ControllerModelNotOwner {
     {
         try {
             string clientType = this.ControllerContext.RouteData.Values["controller"].ToString();
-            int shoeId = JsonSerializer.Deserialize<CreateOwnedShoe>(dto.ToString()).shoeId;
+            int shoeId = JsonSerializer.Deserialize<CreateShoeOrder>(dto.ToString()).shoeId;
             string clientName = $"from an existing shoe of shoe ID {shoeId}";
             Task<Dictionary<String, Object>> result = this.restOperation.Post(this.context, dto);
 

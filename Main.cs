@@ -14,10 +14,11 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<IRestOperation, ClientRest>();
-builder.Services.AddScoped<IRestOperation, ShoeRest>();
-builder.Services.AddScoped<IRestOperation, ShoeRepairRest>();
-builder.Services.AddScoped<IRestOperation, OwnedShoeRest>();
+builder.Services.AddScoped<IRestOperation, ShoewareRest>();
+builder.Services.AddScoped<IRestOperation, ShoewareRepairRest>();
+builder.Services.AddScoped<IRestOperation, OwnedShoewareRest>();
 builder.Services.AddScoped<IRestOperation, OrderCartRest>();
+builder.Services.AddScoped<IRestOperation, ShoewareOrderRest>();
 
 
 // DI for helper algorithms

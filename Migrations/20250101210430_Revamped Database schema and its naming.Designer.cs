@@ -3,6 +3,7 @@ using System;
 using FastTrackEServices.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FastTrackEServices.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250101210430_Revamped Database schema and its naming")]
+    partial class RevampedDatabaseschemaanditsnaming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,7 +100,7 @@ namespace FastTrackEServices.Migrations
 
                     b.HasIndex("shoewareRepairId");
 
-                    b.ToTable("OwnedShoewares");
+                    b.ToTable("OwnedShoes");
                 });
 
             modelBuilder.Entity("FastTrackEServices.Model.Shoeware", b =>
@@ -193,7 +196,7 @@ namespace FastTrackEServices.Migrations
 
                     b.HasIndex("clientId");
 
-                    b.ToTable("ShoewareRepairs");
+                    b.ToTable("ShoeRepairs");
                 });
 
             modelBuilder.Entity("FastTrackEServices.Model.OrderCart", b =>
