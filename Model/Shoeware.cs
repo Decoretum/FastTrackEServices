@@ -8,7 +8,9 @@ public class Shoeware
     [Key]
     public int Id {get; set;}
 
-    public virtual ICollection<ShoewareColor>? shoeColors {get; set;}
+    public ICollection<ShoewareColor>? shoeColors {get; set;}
+
+    public ICollection<ShoewareOrder>? shoeOrders {get; set;}
 
     [Column(TypeName="varchar(100)")]
     public string name {get; set;}

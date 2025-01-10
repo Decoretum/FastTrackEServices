@@ -35,8 +35,8 @@ public class OwnedShoewareRest : IRestOperation {
                 });
 
                 // Get Shoe
-                Task<Shoeware> getShoe = Task.Run(async () => {
-                    Shoeware queriedShoe = await context.Shoewares.Include("shoeColors").Where(shoe => shoe.Id == os.shoe.Id).SingleOrDefaultAsync();
+                Task<Shoeware?> getShoe = Task.Run(async () => {
+                    Shoeware? queriedShoe = await context.Shoewares.Include("shoeColors").Where(shoe => shoe.Id == os.shoe.Id).SingleOrDefaultAsync();
                     return queriedShoe;
                 });
 
@@ -143,7 +143,7 @@ public class OwnedShoewareRest : IRestOperation {
         if (shoe == null) {
             result["Result"] = $"There is no corresponding Shoe with a shoe ID of {dto.shoeId}";
             return result;
-        } 
+        }
 
         DateTime dateNow = DateTime.Now;
 
@@ -174,6 +174,7 @@ public class OwnedShoewareRest : IRestOperation {
         {
             Client newClient = await context.Clients.Where(c => c.Id == dto.clientId).SingleOrDefaultAsync();
             ownedShoe.client = newClient;
+            ownedShoe.shoewareRepair = null;
         }
 
         // Change Shoe

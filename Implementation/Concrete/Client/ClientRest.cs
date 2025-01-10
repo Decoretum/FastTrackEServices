@@ -199,9 +199,13 @@ public class ClientRest : IRestOperation {
 
     public async Task Delete(AppDbContext context, int id)
     {
-        Client toBeDeleted = await context.Clients.Include("ownedShoes").Include("shoeRepairs").Where(client => client.Id == id).SingleOrDefaultAsync();
+        Client toBeDeleted = await context.Clients.Include("ownedShoes").Include("orderCarts").Include("shoeRepairs").Where(client => client.Id == id).SingleOrDefaultAsync();
         ICollection<OwnedShoeware> owned = toBeDeleted.ownedShoes;
         ICollection<ShoewareRepair> repairs = toBeDeleted.shoeRepairs;
+        ICollection<OrderCart> orders = toBeDeleted.orderCarts;
+
+        // Delete Order Carts
+        context.OrderCarts.RemoveRange(orders);
 
         // Delete Shoe Repairs
         context.ShoewareRepairs.RemoveRange(repairs);
@@ -209,7 +213,7 @@ public class ClientRest : IRestOperation {
         // Delete Shoe Owned
         context.OwnedShoewares.RemoveRange(owned);
 
-        // Delete Shoe
+        // Delete Client
         context.Clients.Remove(toBeDeleted);
 
         // Delete OwnedShoe

@@ -185,8 +185,9 @@ public class ShoewareRest : IRestOperation {
 
     public async Task Delete(AppDbContext context, int id)
     {
-        Shoeware toBeDeleted = await context.Shoewares.Include("shoeColors").Where(shoe => shoe.Id == id).SingleOrDefaultAsync();
+        Shoeware toBeDeleted = await context.Shoewares.Include("shoeColors").Include("shoewareOrders").Where(shoe => shoe.Id == id).SingleOrDefaultAsync();
         ICollection<ShoewareColor> colors = toBeDeleted.shoeColors;
+        ICollection<ShoewareOrder> orders = toBeDeleted.shoeOrders;
 
         // Delete ShoeColors
         context.ShoewareColors.RemoveRange(colors);
@@ -194,8 +195,10 @@ public class ShoewareRest : IRestOperation {
         // Delete Shoe
         context.Shoewares.Remove(toBeDeleted);
 
-        // Delete OwnedShoe
+        // Delete Shoeware Orders
+        context.ShoewareOrders.RemoveRange(orders);
 
+        // Delete OwnedShoe
         await context.SaveChangesAsync();
     }
 }

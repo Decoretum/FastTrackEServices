@@ -136,10 +136,15 @@ public class ShoewareRepairRest : IRestOperation {
             {
                 owned.shoewareRepair = null;    
             }
+             
             repair.client = newClient;
 
-            // Repoint owned shoes relationship to the shoe repair
-            // DTO array contains pk of owned shoes of client
+        }
+
+        // Repoint owned shoes relationship to the shoe repair
+        // DTO array contains pk of owned shoes of client
+        if (dto.ownedShoesArray.Length > 0)
+        {
             for (int i = 0; i <= dto.ownedShoesArray.Length - 1; i++)
             {
                 int arrayId = dto.ownedShoesArray[i];
@@ -147,17 +152,23 @@ public class ShoewareRepairRest : IRestOperation {
                 owned.shoewareRepair = repair;
             }
 
-            // Remove owned shoes that were dislodged
-            ICollection<OwnedShoeware> myShoes = repair.ownedShoes;
-            foreach (OwnedShoeware shoe in myShoes)
+            if (repair.client == queriedClient)
             {
-                int pk = shoe.Id;
-                if (!dto.ownedShoesArray.Contains(pk))
+                // Remove owned shoes that were dislodged
+                ICollection<OwnedShoeware> myShoes = repair.ownedShoes;
+                foreach (OwnedShoeware shoe in myShoes)
                 {
-                    shoe.shoewareRepair = null;
-                }
-            }
+                    int pk = shoe.Id;
+                    if (!dto.ownedShoesArray.Contains(pk))
+                    {
+                        shoe.shoewareRepair = null;
+                    }
+                }          
+            } 
+
+             
         }
+        
 
         // Change Date Registered or Date Confirmed
         // Assuming Dates from are in format of MM/DD/YYYY
